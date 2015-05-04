@@ -16,23 +16,64 @@ module.exports = yeoman.generators.Base.extend({
       'Welcome to the marvelous ' + chalk.red('Compost') + ' generator!'
     ));
 
-    var prompts = [{
-      type: 'confirm',
-      name: 'someOption',
-      message: 'Would you like to enable this option?',
-      default: true
-    }];
+    var prompts = [
+      {
+        name: 'name',
+        message: 'What is the name of your component?'
+      },
+      {
+        type: 'confirm',
+        name: 'addTemplate',
+        message: 'Would you like to create a template (PHP HAML)?',
+        default: true
+      },
+      {
+        type: 'confirm',
+        name: 'addStyles',
+        message: 'Would you like to create styles (SUIT CSS component)?',
+        default: true
+      },
+      {
+        type: 'confirm',
+        name: 'addScripts',
+        message: 'Would you like to create scripts (jQueryUI widget)?',
+        default: true
+      }
+    ];
 
     this.prompt(prompts, function (props) {
       this.props = props;
-      // To access props later use this.props.someOption;
-
       done();
     }.bind(this));
   },
 
   writing: {
     app: function () {
+      var key;
+      var value;
+      var options = {
+        addTemplate: 'tpl.haml',
+        addStyles: 'css',
+        addScripts: 'js'
+      };
+      for (key in options) {
+        var value = options[key];
+        if (this.props[key]) {
+          this.fs.copyTpl(
+            this.templatePath('_component.' + value),
+            this.destinationPath(this.props.name + '.' + value),
+            {name: this.props.name}
+          );
+        }
+      }
+
+      // component.json
+      this.fs.copyTpl(
+        this.templatePath('_component.json'),
+        this.destinationPath('component.json'),
+        {props: this.props}
+      );
+
       this.fs.copy(
         this.templatePath('_package.json'),
         this.destinationPath('package.json')
