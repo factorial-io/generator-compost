@@ -1,9 +1,17 @@
-# generator-compost [![Build Status](https://secure.travis-ci.org/factorio-io/generator-compost.png?branch=master)](https://travis-ci.org/factorio-io/generator-compost)
+# generator-compost
 
 > [Yeoman](http://yeoman.io) generator
 
 
 ## Getting Started
+
+*Important: generator-compost is not yet published on npm!*
+If you want to use compost locally, checkout this repo and run from its folder.
+
+```bash
+npm link
+```
+
 
 ### What is Yeoman?
 
