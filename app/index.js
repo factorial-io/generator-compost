@@ -18,7 +18,7 @@ module.exports = yeoman.generators.Base.extend({
 
     var prompts = [
       {
-        name: 'componentName',
+        name: 'name',
         message: 'What is the name of your component?'
       },
       {
@@ -43,14 +43,37 @@ module.exports = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function (props) {
       this.props = props;
-      // To access props later use this.props.someOption;
-
       done();
     }.bind(this));
   },
 
   writing: {
     app: function () {
+      var key;
+      var value;
+      var options = {
+        addTemplate: 'tpl.haml',
+        addStyles: 'css',
+        addScripts: 'js'
+      };
+      for (key in options) {
+        var value = options[key];
+        if (this.props[key]) {
+          this.fs.copyTpl(
+            this.templatePath('_component.' + value),
+            this.destinationPath(this.props.name + '.' + value),
+            {name: this.props.name}
+          );
+        }
+      }
+
+      // component.json
+      this.fs.copyTpl(
+        this.templatePath('_component.json'),
+        this.destinationPath('component.json'),
+        {props: this.props}
+      );
+
       this.fs.copy(
         this.templatePath('_package.json'),
         this.destinationPath('package.json')
@@ -62,7 +85,6 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     projectfiles: function () {
-      // console.log(this.props);
       this.fs.copy(
         this.templatePath('editorconfig'),
         this.destinationPath('.editorconfig')

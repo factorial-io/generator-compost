@@ -1,0 +1,9 @@
+/** @define <%= _.capitalize(_.camelCase(name)) %>; use strict */
+
+:root {
+  --<%= _.capitalize(_.camelCase(name)) %>-variable: 0;
+}
+
+.<%= _.capitalize(_.camelCase(name)) %> {
+
+}
