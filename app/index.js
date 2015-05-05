@@ -57,7 +57,7 @@ module.exports = yeoman.generators.Base.extend({
         addScripts: 'js'
       };
       for (key in options) {
-        var value = options[key];
+        value = options[key];
         if (this.props[key]) {
           this.fs.copyTpl(
             this.templatePath('_component.' + value),
