@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "styles": [<% if (props.addStyles) { %>"<%= props.name %>.css"<% } %>],
   "scripts": [<% if (props.addScripts) { %>"<%= props.name %>.js"<% } %>],
-  "templates": [<% if (props.addTemplate) { %>"<%= props.name %>.tpl-haml"<% } %>],
+  "templates": [<% if (props.addTemplate) { %>"<%= props.name %>.tpl.haml"<% } %>],
   "dependencies": {<% if (props.addScripts) { %>
     "components/jquery": "*",
     "components/jqueryui": "*"<% } %>
