@@ -1,13 +1,10 @@
-/*!
- * jQuery UI Widget-factory plugin boilerplate (for 1.8/9+)
- * Author: @addyosmani
- * Further changes: @peolanha
- * Licensed under the MIT license
- */
+'use strict';
+var jQuery = require('jquery');
+jQuery.ui = require('jqueryui');
 
-;(function ( $, window, document, undefined ) {
+(function ( $, window, document, undefined ) {
 
-  $.widget( "factorial.<%= _.camelCase(name) %>" , {
+  $.widget( 'factorial.<%= _.camelCase(name) %>' , {
 
     options: {
       someValue: null
@@ -17,9 +14,9 @@
 
     _getCreateOptions: function() {
       var options = {};
-      if (this.element.data("options") {
-        options = this.element.data("options");
-      })
+      if (this.element.data('options')) {
+        options = this.element.data('options');
+      }
       return options;
     },
 
@@ -33,25 +30,25 @@
 
     _setOption: function( key, value ) {
       switch (key) {
-        case "someValue":
+        case 'someValue':
           //this.options.someValue = doSomethingWith( value );
           break;
         default:
           //this.options[ key ] = value;
           break;
       }
-      this._super( "_setOption", key, value );
+      this._super( '_setOption', key, value );
     },
 
     // Public methods:
 
     methodB: function( event ) {
-      console.log("methodB called");
+      console.log('methodB called' + event);
     },
 
     methodA: function( event ) {
-      this._trigger("dataChanged", event, {
-        key: "someValue"
+      this._trigger('dataChanged', event, {
+        key: 'someValue'
       });
     }
 

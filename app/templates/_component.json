@@ -3,8 +3,12 @@
   "repo": "factorial-io/<%= props.name %>",
   "version": "0.0.0",
   "styles": [<% if (props.addStyles) { %>"<%= props.name %>.css"<% } %>],
-  "scripts": [<% if (props.addStyles) { %>"<%= props.name %>.js"<% } %>],
-  "dependencies": {},
+  "scripts": [<% if (props.addScripts) { %>"<%= props.name %>.js"<% } %>],
+  "templates": [<% if (props.addTemplate) { %>"<%= props.name %>.tpl.haml"<% } %>],
+  "dependencies": {<% if (props.addScripts) { %>
+    "components/jquery": "*",
+    "components/jqueryui": "*"<% } %>
+  },
   "license": "MIT"<% if (props.addTemplate) { %>,
   "backend": {
     "template": "<%= props.name %>.tpl.haml",
