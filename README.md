@@ -2,30 +2,41 @@
 
 > [Yeoman](http://yeoman.io) generator
 
+Generator compost scaffolds opinionated, component-like structures into your project. Depending on your choices it will create the following files:
 
-## Getting Started
+    ├── _bower.json
+    ├── _component.css
+    ├── _component.js
+    ├── _component.json
+    ├── _component.tpl.haml
+    ├── _package.json
+    ├── editorconfig
+    └── jshintrc
 
-*Important: generator-compost is not yet published on npm!*
-If you want to use compost locally, checkout this repo and run from its folder.
+## Prerequisites 
 
-```bash
-npm link
-```
+Install Yeoman.
+
+    npm install -g yo
 
 
-### What is Yeoman?
+Important: generator-compost is not yet published on npm. If you want to use generator compost locally, checkout this repository and run from its folder:
 
-Trick question. It's not a thing. It's this guy:
+    git clone ssh://git@source.factorial.io:2222/components/generator-compost.git
 
-![](http://i.imgur.com/JHaAlBJ.png)
+    npm link
 
-Basically, he wears a top hat, lives in your computer, and waits for you to tell him what kind of application you wish to create.
+## Usage 
 
-Not every new computer comes with a Yeoman pre-installed. He lives in the [npm](https://npmjs.org) package repository. You only have to ask for him once, then he packs up and moves into your hard drive. *Make sure you clean up, he likes new and shiny things.*
+  yo compost <my-component-name>
 
-```bash
-npm install -g yo
-```
+## Version history
+
+0.2.0 
+
+  - Now accepts component name directly and only from the command line. 
+  - Now creates component directory into `components_local/my-component-name`.
+  - Writes local dependency to projects component.json, if present.
 
 ### Yeoman Generators
 
@@ -42,13 +53,6 @@ Finally, initiate the generator:
 ```bash
 yo compost
 ```
-
-### Getting To Know Yeoman
-
-Yeoman has a heart of gold. He's a person with feelings and opinions, but he's very easy to work with. If you think he's too opinionated, he can be easily convinced.
-
-If you'd like to get to know Yeoman better and meet some of his friends, [Grunt](http://gruntjs.com) and [Bower](http://bower.io), check out the complete [Getting Started Guide](https://github.com/yeoman/yeoman/wiki/Getting-Started).
-
 
 ## License
 
