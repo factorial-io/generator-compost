@@ -2,6 +2,7 @@
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
+var path = require ('path');
 
 module.exports = yeoman.generators.Base.extend({
 
@@ -55,6 +56,14 @@ module.exports = yeoman.generators.Base.extend({
 
   writing: {
 
+    changeDestinationRoot: function() {
+      this.destinationRoot(path.join(
+        this.destinationRoot(),
+        '/components_local',
+        '/' + this.name
+      ));
+    },
+
     app: function() {
       var key;
       var value;
@@ -63,6 +72,7 @@ module.exports = yeoman.generators.Base.extend({
         addStyles: 'css',
         addScripts: 'js'
       };
+
       for (key in options) {
         value = options[key];
         if (this.props[key]) {
