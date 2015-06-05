@@ -20,7 +20,6 @@ module.exports = yeoman.generators.Base.extend({
   prompting: function() {
     var done = this.async();
 
-    // Have Yeoman greet the user.
     this.log(yosay(
       'Welcome to the marvelous ' + chalk.red('Compost') + ' generator!'
     ));
@@ -57,7 +56,6 @@ module.exports = yeoman.generators.Base.extend({
   writing: {
 
     app: function() {
-      var i;
       var key;
       var value;
       var options = {
@@ -65,12 +63,6 @@ module.exports = yeoman.generators.Base.extend({
         addStyles: 'css',
         addScripts: 'js'
       };
-      var packages = [
-        '_component.json',
-        '_package.json',
-        '_bower.json'
-      ];
-
       for (key in options) {
         value = options[key];
         if (this.props[key]) {
@@ -81,7 +73,15 @@ module.exports = yeoman.generators.Base.extend({
           );
         }
       }
+    },
 
+    packageFiles: function() {
+      var i;
+      var packages = [
+        '_component.json',
+        '_package.json',
+        '_bower.json'
+      ];
       for (i = 0; i < packages.length; i += 1) {
         this.fs.copyTpl(
           this.templatePath(packages[i]),
@@ -91,16 +91,20 @@ module.exports = yeoman.generators.Base.extend({
       }
     },
 
-    projectfiles: function() {
-      this.fs.copy(
-        this.templatePath('editorconfig'),
-        this.destinationPath('.editorconfig')
-      );
-      this.fs.copy(
-        this.templatePath('jshintrc'),
-        this.destinationPath('.jshintrc')
-      );
+    projectFiles: function() {
+      var i;
+      var projectFiles = [
+        'editorconfig',
+        'jshintrc'
+      ];
+      for (i = 0; i < projectFiles.length; i += 1) {
+        this.fs.copy(
+          this.templatePath(projectFiles[i]),
+          this.destinationPath('.' + projectFiles[i])
+        );
+      }
     }
+
   },
 
   install: function() {
