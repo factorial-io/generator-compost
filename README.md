@@ -28,7 +28,7 @@ Important: generator-compost is not yet published on npm. If you want to use gen
 
 ## Usage 
 
-  yo compost my-component-name
+    yo compost my-component-name
 
 ## Version history
 
