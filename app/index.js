@@ -3,6 +3,10 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require ('path');
+var jf = require('jsonfile');
+var util = require('util');
+
+jf.spaces = 2;
 
 module.exports = yeoman.generators.Base.extend({
 
@@ -55,6 +59,32 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   writing: {
+
+    /*
+     * Adds a new local dependency to the project's component.json if not
+     * already present.
+     */
+
+    updateComponentJson: function() {
+      var i;
+      var found = false;
+      var file = 'component.json';
+      var obj = jf.readFileSync(file, {throws: false});
+
+      if (obj && obj.locals) {
+
+        for (i = 0; i < obj.locals.length; i += 1) {
+          if (obj.locals[i] === this.props.name) {
+            found = true;
+          }
+        }
+
+        if (!found) {
+          obj.locals.push(this.props.name);
+          jf.writeFileSync(file, obj);
+        }
+      }
+    },
 
     changeDestinationRoot: function() {
       this.destinationRoot(path.join(
