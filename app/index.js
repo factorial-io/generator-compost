@@ -4,11 +4,20 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 
 module.exports = yeoman.generators.Base.extend({
-  initializing: function () {
+
+  constructor: function() {
+    yeoman.generators.Base.apply(this, arguments);
+    this.argument('name', {
+      type: String,
+      required: true
+    });
+  },
+
+  initializing: function() {
     this.pkg = require('../package.json');
   },
 
-  prompting: function () {
+  prompting: function() {
     var done = this.async();
 
     // Have Yeoman greet the user.
@@ -17,10 +26,6 @@ module.exports = yeoman.generators.Base.extend({
     ));
 
     var prompts = [
-      {
-        name: 'name',
-        message: 'What is the name of your component?'
-      },
       {
         type: 'confirm',
         name: 'addTemplate',
@@ -42,13 +47,17 @@ module.exports = yeoman.generators.Base.extend({
     ];
 
     this.prompt(prompts, function (props) {
+      this.props = {};
       this.props = props;
+      this.props.name = this.name;
       done();
     }.bind(this));
   },
 
   writing: {
-    app: function () {
+
+    app: function() {
+      var i;
       var key;
       var value;
       var options = {
@@ -56,6 +65,12 @@ module.exports = yeoman.generators.Base.extend({
         addStyles: 'css',
         addScripts: 'js'
       };
+      var packages = [
+        '_component.json',
+        '_package.json',
+        '_bower.json'
+      ];
+
       for (key in options) {
         value = options[key];
         if (this.props[key]) {
@@ -67,24 +82,16 @@ module.exports = yeoman.generators.Base.extend({
         }
       }
 
-      // component.json
-      this.fs.copyTpl(
-        this.templatePath('_component.json'),
-        this.destinationPath('component.json'),
-        {props: this.props}
-      );
-
-      this.fs.copy(
-        this.templatePath('_package.json'),
-        this.destinationPath('package.json')
-      );
-      this.fs.copy(
-        this.templatePath('_bower.json'),
-        this.destinationPath('bower.json')
-      );
+      for (i = 0; i < packages.length; i += 1) {
+        this.fs.copyTpl(
+          this.templatePath(packages[i]),
+          this.destinationPath(packages[i].substr(1)),
+          {props: this.props}
+        );
+      }
     },
 
-    projectfiles: function () {
+    projectfiles: function() {
       this.fs.copy(
         this.templatePath('editorconfig'),
         this.destinationPath('.editorconfig')
@@ -96,7 +103,7 @@ module.exports = yeoman.generators.Base.extend({
     }
   },
 
-  install: function () {
+  install: function() {
     this.installDependencies();
   }
 });
