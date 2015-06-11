@@ -1,10 +1,10 @@
 'use strict';
-var jQuery = require('jquery');
+jQuery = require('jquery');
 jQuery.ui = require('jqueryui');
 
-(function ( $, window, document, undefined ) {
+(function ($, window, document, undefined) {
 
-  $.widget( 'factorial.<%= _.camelCase(name) %>' , {
+  $.widget('factorial.<%= _.camelCase(name) %>', {
 
     options: {
       someValue: null
@@ -34,10 +34,10 @@ jQuery.ui = require('jqueryui');
           //this.options.someValue = doSomethingWith( value );
           break;
         default:
-          //this.options[ key ] = value;
+          //this.options[key] = value;
           break;
       }
-      this._super( '_setOption', key, value );
+      this._super('_setOption', key, value);
     },
 
     // Public methods:
@@ -54,4 +54,4 @@ jQuery.ui = require('jqueryui');
 
   });
 
-})( jQuery, window, document );
+})(jQuery, window, document);
