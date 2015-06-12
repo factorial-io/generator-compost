@@ -1,57 +1,99 @@
 'use strict';
-var jQuery = require('jquery');
-jQuery.ui = require('jqueryui');
 
-(function ( $, window, document, undefined ) {
+/**
+ *@fileOverview
+ *@version 0.0.1
+ *
+ * @namespace factorial.<%= _.camelCase(name) %>
+ */
 
-  $.widget( 'factorial.<%= _.camelCase(name) %>' , {
+var $;
 
-    options: {
-      someValue: null
-    },
+$ = require('jquery');
+$.ui = require('jqueryui');
 
-    // Private methods:
+$.widget('factorial.<%= _.camelCase(name) %>', {
 
-    _getCreateOptions: function() {
-      var options = {};
-      if (this.element.data('options')) {
-        options = this.element.data('options');
-      }
-      return options;
-    },
+  /*
+   * Options to be used as defaults.
+   */
 
-    _create: function() {
+  options: {
+    someValue: null
+  },
 
-    },
+  /**
+   * Implements {@link https://api.jqueryui.com/jquery.widget/#method-_getCreateOptions|$.widget._getCreateOptions}
+   *
+   * @memberof factorial.<%= _.camelCase(name) %>
+   * @instance
+   * @private
+   */
 
-    _destroy: function() {
-
-    },
-
-    _setOption: function( key, value ) {
-      switch (key) {
-        case 'someValue':
-          //this.options.someValue = doSomethingWith( value );
-          break;
-        default:
-          //this.options[ key ] = value;
-          break;
-      }
-      this._super( '_setOption', key, value );
-    },
-
-    // Public methods:
-
-    methodB: function( event ) {
-      console.log('methodB called' + event);
-    },
-
-    methodA: function( event ) {
-      this._trigger('dataChanged', event, {
-        key: 'someValue'
-      });
+  _getCreateOptions: function() {
+    var options = {};
+    if (this.element.data('options')) {
+      options = this.element.data('options');
     }
+    return options;
+  },
 
-  });
+  /**
+   * Implements {@link https://api.jqueryui.com/jquery.widget/#method-_create|$.widget._create}
+   *
+   * @memberof factorial.<%= _.camelCase(name) %>
+   * @instance
+   * @private
+   */
 
-})( jQuery, window, document );
+  _create: function() {
+
+  },
+
+  /**
+   * Implements {@link https://api.jqueryui.com/jquery.widget/#method-_destroy|$.widget._destroy}
+   *
+   * @memberof factorial.<%= _.camelCase(name) %>
+   * @instance
+   * @private
+   */
+
+  _destroy: function() {
+
+  },
+
+  /**
+   * Implements {@link https://api.jqueryui.com/jquery.widget/#method-_setOption|$.widget._setOption}
+   *
+   * @memberof factorial.<%= _.camelCase(name) %>
+   * @instance
+   * @private
+   */
+
+  _setOption: function( key, value ) {
+    switch (key) {
+      case 'someValue':
+        //this.options.someValue = doSomethingWith( value );
+        break;
+      default:
+        //this.options[key] = value;
+        break;
+    }
+    this._super('_setOption', key, value);
+  },
+
+  /*
+   * Public methods
+   */
+
+  methodB: function(event) {
+    console.log('methodB called' + event);
+  },
+
+  methodA: function(event) {
+    this._trigger('dataChanged', event, {
+      key: 'someValue'
+    });
+  }
+
+});
