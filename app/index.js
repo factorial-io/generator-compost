@@ -115,27 +115,31 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     app: function() {
-      var key;
-      var value;
       var options = {
         addTemplate: 'tpl.' + this.props.templateName,
         addStyles: 'css',
         addScripts: 'js'
       };
 
-      for (key in options) {
-        value = options[key];
-        if (this.props[key]) {
-          this.fs.copyTpl(
-            this.templatePath('_component.' + value),
-            this.destinationPath(this.props.name + '.' + value),
-            {
-              name: this.props.name,
-              instantiate: this.props.instantiate
-            }
-          );
-        }
-      }
+      var matchesProperty = function(n, key) {
+        return this.props[key] ? true : false;
+      };
+
+      var copyTemplate = function(n) {
+        this.fs.copyTpl(
+          this.templatePath('_component.' + n),
+          this.destinationPath(this.props.name + '.' + n),
+          {
+            name: this.props.name,
+            instantiate: this.props.instantiate
+          }
+        );
+      };
+
+      _.forEach(
+        _.filter(options, matchesProperty.bind(this)),
+        copyTemplate.bind(this)
+      );
     },
 
     packageFiles: function() {
