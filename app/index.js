@@ -5,6 +5,7 @@ var yosay = require('yosay');
 var path = require ('path');
 var jf = require('jsonfile');
 var util = require('util');
+var _ = require('lodash');
 
 jf.spaces = 2;
 
@@ -40,7 +41,7 @@ module.exports = yeoman.generators.Base.extend({
         type: 'list',
         name: 'templateName',
         message: 'What template language do you want to use?',
-        choices: ['php', 'haml'],
+        choices: ['haml', 'php'],
         default: 'haml',
         when: function (answers) {
           return answers.addTemplate;
@@ -57,6 +58,16 @@ module.exports = yeoman.generators.Base.extend({
         name: 'addScripts',
         message: 'Would you like to create scripts (jQueryUI widget)?',
         default: true
+      },
+      {
+        type: 'list',
+        name: 'instantiate',
+        message: 'How should the widget be instantiated?',
+        choices: ['$(document).ready', 'Drupal.behaviors'],
+        default: '$(document).ready',
+        when: function (answers) {
+          return answers.addScripts;
+        }
       }
     ];
 
@@ -76,18 +87,17 @@ module.exports = yeoman.generators.Base.extend({
      */
 
     updateComponentJson: function() {
-      var i;
       var found = false;
       var file = 'component.json';
       var obj = jf.readFileSync(file, {throws: false});
 
       if (obj && obj.locals) {
 
-        for (i = 0; i < obj.locals.length; i += 1) {
-          if (obj.locals[i] === this.props.name) {
-            found = true;
-          }
-        }
+        var isName = function(element) {
+          return element === this.props.name;
+        };
+
+        found = _.some(obj.locals, isName.bind(this));
 
         if (!found) {
           obj.locals.push(this.props.name);
@@ -105,24 +115,31 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     app: function() {
-      var key;
-      var value;
       var options = {
         addTemplate: 'tpl.' + this.props.templateName,
         addStyles: 'css',
         addScripts: 'js'
       };
 
-      for (key in options) {
-        value = options[key];
-        if (this.props[key]) {
-          this.fs.copyTpl(
-            this.templatePath('_component.' + value),
-            this.destinationPath(this.props.name + '.' + value),
-            {name: this.props.name}
-          );
-        }
-      }
+      var matchesProperty = function(n, key) {
+        return this.props[key] ? true : false;
+      };
+
+      var copyTemplate = function(n) {
+        this.fs.copyTpl(
+          this.templatePath('_component.' + n),
+          this.destinationPath(this.props.name + '.' + n),
+          {
+            name: this.props.name,
+            instantiate: this.props.instantiate
+          }
+        );
+      };
+
+      _.forEach(
+        _.filter(options, matchesProperty.bind(this)),
+        copyTemplate.bind(this)
+      );
     },
 
     packageFiles: function() {
@@ -154,7 +171,6 @@ module.exports = yeoman.generators.Base.extend({
         );
       }
     }
-
   },
 
   install: function() {
