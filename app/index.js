@@ -41,7 +41,7 @@ module.exports = yeoman.generators.Base.extend({
         type: 'list',
         name: 'templateName',
         message: 'What template language do you want to use?',
-        choices: ['php', 'haml'],
+        choices: ['haml', 'php'],
         default: 'haml',
         when: function (answers) {
           return answers.addTemplate;
@@ -58,6 +58,16 @@ module.exports = yeoman.generators.Base.extend({
         name: 'addScripts',
         message: 'Would you like to create scripts (jQueryUI widget)?',
         default: true
+      },
+      {
+        type: 'list',
+        name: 'instantiate',
+        message: 'How should the widget be instantiated?',
+        choices: ['$(document).ready', 'Drupal.behaviors'],
+        default: '$(document).ready',
+        when: function (answers) {
+          return answers.addScripts;
+        }
       }
     ];
 
@@ -119,7 +129,10 @@ module.exports = yeoman.generators.Base.extend({
           this.fs.copyTpl(
             this.templatePath('_component.' + value),
             this.destinationPath(this.props.name + '.' + value),
-            {name: this.props.name}
+            {
+              name: this.props.name,
+              instantiate: this.props.instantiate
+            }
           );
         }
       }
