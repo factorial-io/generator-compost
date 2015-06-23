@@ -136,10 +136,8 @@ module.exports = yeoman.generators.Base.extend({
         );
       };
 
-      _.forEach(
-        _.filter(options, matchesProperty.bind(this)),
-        copyTemplate.bind(this)
-      );
+      _(_.filter(options, matchesProperty.bind(this)))
+        .forEach(copyTemplate.bind(this));
     },
 
     packageFiles: function() {
