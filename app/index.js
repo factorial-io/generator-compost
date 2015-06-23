@@ -33,8 +33,18 @@ module.exports = yeoman.generators.Base.extend({
       {
         type: 'confirm',
         name: 'addTemplate',
-        message: 'Would you like to create a template (PHP HAML)?',
+        message: 'Would you like to create a template?',
         default: true
+      },
+      {
+        type: 'list',
+        name: 'templateName',
+        message: 'What template language do you want to use?',
+        choices: ['php', 'haml'],
+        default: 'haml',
+        when: function (answers) {
+          return answers.addTemplate;
+        }
       },
       {
         type: 'confirm',
@@ -98,7 +108,7 @@ module.exports = yeoman.generators.Base.extend({
       var key;
       var value;
       var options = {
-        addTemplate: 'tpl.haml',
+        addTemplate: 'tpl.' + this.props.templateName,
         addStyles: 'css',
         addScripts: 'js'
       };
