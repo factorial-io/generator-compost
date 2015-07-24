@@ -12,7 +12,7 @@
   "license": "MIT"<% if (props.addTemplate) { %>,
   "backend": {
     "template": "<%= props.name %>.tpl.haml",
-    "arguments": {
-    }
+    "fixture": {},
+    "options": {}
   }<% } %>
 }
