@@ -1,6 +1,6 @@
 {
   "name": "<%= props.name %>",
-  "repo": "factorial-io/<%= props.name %>",
+  "repository": "factorial-io/<%= props.name %>",
   "version": "0.0.0",
   "styles": [<% if (props.addStyles) { %>"<%= props.name %>.css"<% } %>],
   "scripts": [<% if (props.addScripts) { %>"<%= props.name %>.js"<% } %>],
