@@ -150,10 +150,9 @@ module.exports = yeoman.generators.Base.extend({
     packageFiles: function() {
       var i;
       var packages = [
-        '_component.json',
-        '_package.json',
-        '_bower.json'
+        '_component.json'
       ];
+
       for (i = 0; i < packages.length; i += 1) {
         this.fs.copyTpl(
           this.templatePath(packages[i]),
@@ -176,9 +175,5 @@ module.exports = yeoman.generators.Base.extend({
         );
       }
     }
-  },
-
-  install: function() {
-    this.installDependencies();
   }
 });
