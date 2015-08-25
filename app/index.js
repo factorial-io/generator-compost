@@ -41,8 +41,12 @@ module.exports = yeoman.generators.Base.extend({
         type: 'list',
         name: 'templateName',
         message: 'What template language do you want to use?',
-        choices: ['haml', 'php'],
-        default: 'haml',
+        choices: [
+          'tpl.haml',
+          'tpl.php',
+          'tag'
+        ],
+        default: 'tpl.haml',
         when: function (answers) {
           return answers.addTemplate;
         }
@@ -116,7 +120,7 @@ module.exports = yeoman.generators.Base.extend({
 
     app: function() {
       var options = {
-        addTemplate: 'tpl.' + this.props.templateName,
+        addTemplate: this.props.templateName,
         addStyles: 'css',
         addScripts: 'js'
       };
