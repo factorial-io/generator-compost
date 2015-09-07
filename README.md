@@ -17,18 +17,23 @@ Generator compost scaffolds opinionated, component-like structures into your pro
 
 Install Yeoman.
 
-    npm install -g yo
+```bash
+npm install -g yo
+```
 
+Install compost
 
-Important: generator-compost is not yet published on npm. If you want to use generator compost locally, checkout this repository and run from its folder:
+```bash
+npm install -g generator-compost
+```
 
-    git clone ssh://git@source.factorial.io:2222/components/generator-compost.git
+## Usage
 
-    npm link
+Run in theme-folder
 
-## Usage 
-
-    yo compost my-component-name
+```bash
+yo compost my-component-name
+```
 
 ## Version history
 
