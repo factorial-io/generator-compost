@@ -7,7 +7,7 @@
  * @namespace factorial.<%= _.camelCase(name) %>
  */
 
-require('jquery');
+window.jQuery = require('jquery');
 require('jqueryui');
 
 (function ($, window, document, undefined) {
