@@ -178,8 +178,7 @@ module.exports = yeoman.generators.Base.extend({
     packageFiles: function() {
       var i;
       var packages = [
-        '_component.json',
-        '_package.json'
+        '_component.json'
       ];
 
       for (i = 0; i < packages.length; i += 1) {
@@ -189,6 +188,44 @@ module.exports = yeoman.generators.Base.extend({
           {props: this.props}
         );
       }
+
+      this.packageJson = {
+        'name': this.props.name,
+        'version': '0.0.0',
+        'repository': {
+          'type': 'git',
+          'url': 'https://github.com/factorial-io/' + this.props.name
+        },
+        'license': 'MIT',
+        'main': '',
+        'style': '',
+        'files': [],
+        'dependencies': {},
+        'backend': {
+          'template': '',
+          'fixture': '',
+          'options': ''
+        }
+      };
+
+      if (this.props.addScripts) {
+        this.packageJson.main = this.props.name + '.js';
+        this.packageJson.dependencies = {
+          'components/jquery': '*',
+          'components/jqueryui': '*'
+        };
+        this.packageJson.files.push(this.props.name + '.js');
+      }
+      if (this.props.addStyles) {
+        this.packageJson.style = this.props.name + '.css';
+        this.packageJson.files.push(this.props.name + '.css');
+      }
+      if (this.props.addTemplate) {
+        this.packageJson.files.push(this.props.name + this.props.templateName);
+        this.packageJson.backend.template = this.props.name + this.props.templateName;
+      }
+
+      this.write('package.json', JSON.stringify(this.packageJson, null, 2));
     },
 
     projectFiles: function() {
