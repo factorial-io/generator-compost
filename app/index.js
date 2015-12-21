@@ -11,14 +11,6 @@ jf.spaces = 2;
 
 module.exports = yeoman.generators.Base.extend({
 
-  constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
-    this.argument('name', {
-      type: String,
-      required: true
-    });
-  },
-
   initializing: function() {
     this.pkg = require('../package.json');
   },
@@ -31,6 +23,10 @@ module.exports = yeoman.generators.Base.extend({
     ));
 
     var prompts = [
+      {
+        name: 'name',
+        message: 'What is your component\'s name?'
+      },
       {
         type: 'confirm',
         name: 'addTemplate',
@@ -72,13 +68,23 @@ module.exports = yeoman.generators.Base.extend({
         when: function (answers) {
           return answers.addScripts;
         }
+      },
+      {
+        type: 'list',
+        name: 'implement',
+        message: 'What implementation do you want to use?',
+        choices: [
+          'package.json',
+          'component.json'
+        ],
+        default: 'package.json'
       }
     ];
 
     this.prompt(prompts, function (props) {
       this.props = {};
       this.props = props;
-      this.props.name = this.name;
+      //this.props.name = this.name;
       done();
     }.bind(this));
   },
@@ -90,22 +96,44 @@ module.exports = yeoman.generators.Base.extend({
      * already present.
      */
 
-    updateComponentJson: function() {
+    updateJson: function() {
       var found = false;
-      var file = 'component.json';
+
+      var file = this.props.implement;
       var obj = jf.readFileSync(file, {throws: false});
 
-      if (obj && obj.locals) {
 
-        var isName = function(element) {
-          return element === this.props.name;
-        };
+      if (this.props.implement === 'package.json') {
+        if (obj) {
+          if (!obj.dependencies) {
+            obj.dependencies = {};
+            jf.writeFileSync(file, obj);
+          }
 
-        found = _.some(obj.locals, isName.bind(this));
+          var isName = function(element) {
+            return element === this.props.name;
+          };
 
-        if (!found) {
-          obj.locals.push(this.props.name);
-          jf.writeFileSync(file, obj);
+          found = _.some(obj.dependencies, isName.bind(this));
+
+          if (!found) {
+            obj.dependencies[this.props.name] = 'file:./components_local/' + this.props.name;
+            jf.writeFileSync(file, obj);
+          }
+        }
+      } else if (this.props.implement === 'component.json') {
+        if (obj && obj.locals) {
+
+          var isName = function(element) {
+            return element === this.props.name;
+          };
+
+          found = _.some(obj.locals, isName.bind(this));
+
+          if (!found) {
+            obj.locals.push(this.props.name);
+            jf.writeFileSync(file, obj);
+          }
         }
       }
     },
@@ -114,7 +142,7 @@ module.exports = yeoman.generators.Base.extend({
       this.destinationRoot(path.join(
         this.destinationRoot(),
         '/components_local',
-        '/' + this.name
+        '/' + this.props.name
       ));
     },
 
@@ -150,7 +178,8 @@ module.exports = yeoman.generators.Base.extend({
     packageFiles: function() {
       var i;
       var packages = [
-        '_component.json'
+        '_component.json',
+        '_package.json'
       ];
 
       for (i = 0; i < packages.length; i += 1) {
