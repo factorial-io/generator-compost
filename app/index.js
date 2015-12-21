@@ -72,7 +72,7 @@ module.exports = yeoman.generators.Base.extend({
       {
         type: 'list',
         name: 'implement',
-        message: 'What implementation do you want to use?',
+        message: 'How do you want to resolve your dependencies?',
         choices: [
           'package.json',
           'component.json'
