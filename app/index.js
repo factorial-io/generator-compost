@@ -28,6 +28,11 @@ module.exports = yeoman.generators.Base.extend({
         message: 'What is your component\'s name?'
       },
       {
+        name: 'githubUsername',
+        message: 'GitHub username?',
+        default: 'factorial-io'
+      },
+      {
         type: 'confirm',
         name: 'addTemplate',
         message: 'Would you like to create a template?',
@@ -190,7 +195,7 @@ module.exports = yeoman.generators.Base.extend({
         'version': '0.0.0',
         'repository': {
           'type': 'git',
-          'url': 'https://github.com/factorial-io/' + this.props.name
+          'url': 'https://github.com/' + this.props.githubUsername + '/' + this.props.name
         },
         'license': 'MIT',
         'main': '',
