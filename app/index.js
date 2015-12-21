@@ -101,17 +101,16 @@ module.exports = yeoman.generators.Base.extend({
       var file = this.props.implement;
       var obj = jf.readFileSync(file, {throws: false});
 
+      var isName = function(element) {
+        return element === this.props.name;
+      };
 
-      if (this.props.implement === 'package.json') {
-        if (obj) {
+      if (obj) {
+        if (this.props.implement === 'package.json') {
           if (!obj.dependencies) {
             obj.dependencies = {};
             jf.writeFileSync(file, obj);
           }
-
-          var isName = function(element) {
-            return element === this.props.name;
-          };
 
           found = _.some(obj.dependencies, isName.bind(this));
 
@@ -119,13 +118,11 @@ module.exports = yeoman.generators.Base.extend({
             obj.dependencies[this.props.name] = 'file:./components_local/' + this.props.name;
             jf.writeFileSync(file, obj);
           }
-        }
-      } else if (this.props.implement === 'component.json') {
-        if (obj && obj.locals) {
-
-          var isName = function(element) {
-            return element === this.props.name;
-          };
+        } else if (this.props.implement === 'component.json') {
+          if (!obj.locals) {
+            obj.locals = {};
+            jf.writeFileSync(file, obj);
+          }
 
           found = _.some(obj.locals, isName.bind(this));
 
