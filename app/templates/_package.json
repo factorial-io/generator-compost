@@ -1,5 +1,28 @@
 {
   "name": "<%= props.name %>",
   "version": "0.0.0",
-  "dependencies": {}
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/factorial-io/<%= props.name %>"
+  },
+  "main": "<% if (props.addScripts) { %><%= props.name %>.js<% } %>",
+  "style": "<% if (props.addStyles) { %><%= props.name %>.css<% } %>",
+  "files": [
+    <% if (props.addTemplate) { %>"<%= props.name %>.<%= props.templateName %>",<% } %>
+    <% if (props.addScripts) { %>"<%= props.name %>.js",<% } %>
+    <% if (props.addStyles) { %>"<%= props.name %>.css"<% } %>
+  ],
+  "scripts": {
+    "test": "echo "Error: no test specified" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {<% if (props.addScripts) { %>
+    "jquery": "*",
+    "jqueryui": "*"<% } %>
+  },
+  "backend": {
+    "template": "<% if (props.addTemplate) { %><%= props.name %>.<%= props.templateName %><% } %>",
+    "fixture": {},
+    "options": {}
+  }
 }

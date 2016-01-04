@@ -11,14 +11,6 @@ jf.spaces = 2;
 
 module.exports = yeoman.generators.Base.extend({
 
-  constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
-    this.argument('name', {
-      type: String,
-      required: true
-    });
-  },
-
   initializing: function() {
     this.pkg = require('../package.json');
   },
@@ -31,6 +23,15 @@ module.exports = yeoman.generators.Base.extend({
     ));
 
     var prompts = [
+      {
+        name: 'name',
+        message: 'What is your component\'s name?'
+      },
+      {
+        name: 'githubUsername',
+        message: 'GitHub username?',
+        default: 'factorial-io'
+      },
       {
         type: 'confirm',
         name: 'addTemplate',
@@ -72,13 +73,22 @@ module.exports = yeoman.generators.Base.extend({
         when: function (answers) {
           return answers.addScripts;
         }
+      },
+      {
+        type: 'list',
+        name: 'implement',
+        message: 'How do you want to resolve your dependencies?',
+        choices: [
+          'package.json',
+          'component.json'
+        ],
+        default: 'package.json'
       }
     ];
 
     this.prompt(prompts, function (props) {
       this.props = {};
       this.props = props;
-      this.props.name = this.name;
       done();
     }.bind(this));
   },
@@ -90,22 +100,41 @@ module.exports = yeoman.generators.Base.extend({
      * already present.
      */
 
-    updateComponentJson: function() {
+    updateJson: function() {
       var found = false;
-      var file = 'component.json';
+
+      var file = this.props.implement;
       var obj = jf.readFileSync(file, {throws: false});
 
-      if (obj && obj.locals) {
+      var isName = function(element) {
+        return element === this.props.name;
+      };
 
-        var isName = function(element) {
-          return element === this.props.name;
-        };
+      if (obj) {
+        if (this.props.implement === 'package.json') {
+          if (!obj.dependencies) {
+            obj.dependencies = {};
+            jf.writeFileSync(file, obj);
+          }
 
-        found = _.some(obj.locals, isName.bind(this));
+          found = _.some(obj.dependencies, isName.bind(this));
 
-        if (!found) {
-          obj.locals.push(this.props.name);
-          jf.writeFileSync(file, obj);
+          if (!found) {
+            obj.dependencies[this.props.name] = 'file:./components_local/' + this.props.name;
+            jf.writeFileSync(file, obj);
+          }
+        } else if (this.props.implement === 'component.json') {
+          if (!obj.locals) {
+            obj.locals = {};
+            jf.writeFileSync(file, obj);
+          }
+
+          found = _.some(obj.locals, isName.bind(this));
+
+          if (!found) {
+            obj.locals.push(this.props.name);
+            jf.writeFileSync(file, obj);
+          }
         }
       }
     },
@@ -114,7 +143,7 @@ module.exports = yeoman.generators.Base.extend({
       this.destinationRoot(path.join(
         this.destinationRoot(),
         '/components_local',
-        '/' + this.name
+        '/' + this.props.name
       ));
     },
 
@@ -160,6 +189,44 @@ module.exports = yeoman.generators.Base.extend({
           {props: this.props}
         );
       }
+
+      this.packageJson = {
+        'name': this.props.name,
+        'version': '0.0.0',
+        'repository': {
+          'type': 'git',
+          'url': 'https://github.com/' + this.props.githubUsername + '/' + this.props.name
+        },
+        'license': 'MIT',
+        'main': '',
+        'style': '',
+        'files': [],
+        'dependencies': {},
+        'backend': {
+          'template': '',
+          'fixture': '',
+          'options': ''
+        }
+      };
+
+      if (this.props.addScripts) {
+        this.packageJson.main = this.props.name + '.js';
+        this.packageJson.dependencies = {
+          'components/jquery': '*',
+          'components/jqueryui': '*'
+        };
+        this.packageJson.files.push(this.props.name + '.js');
+      }
+      if (this.props.addStyles) {
+        this.packageJson.style = this.props.name + '.css';
+        this.packageJson.files.push(this.props.name + '.css');
+      }
+      if (this.props.addTemplate) {
+        this.packageJson.files.push(this.props.name + this.props.templateName);
+        this.packageJson.backend.template = this.props.name + this.props.templateName;
+      }
+
+      this.write('package.json', JSON.stringify(this.packageJson, null, 2));
     },
 
     projectFiles: function() {
