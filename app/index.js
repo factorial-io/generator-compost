@@ -144,7 +144,7 @@ module.exports = yeoman.generators.Base.extend({
       var componentPath = null;
 
       if (this.props.implement === 'import') {
-        componentPath = '/source/assets/components';
+        componentPath = '/source/source/components';
       } else {
         componentPath = '/components_local';
       }
