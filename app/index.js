@@ -141,16 +141,16 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     changeDestinationRoot: function() {
-      var component_path = null;
+      var componentPath = null;
 
       if (this.props.implement === 'import') {
-        component_path = '/source/assets/components';
+        componentPath = '/source/assets/components';
       } else {
-        component_path = '/components_local';
+        componentPath = '/components_local';
       }
       this.destinationRoot(path.join(
         this.destinationRoot(),
-        component_path,
+        componentPath,
         '/' + this.props.name
       ));
     },
