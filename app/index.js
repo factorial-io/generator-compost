@@ -80,7 +80,8 @@ module.exports = yeoman.generators.Base.extend({
         message: 'How do you want to resolve your dependencies?',
         choices: [
           'package.json',
-          'component.json'
+          'component.json',
+          'import'
         ],
         default: 'package.json'
       }
@@ -140,11 +141,19 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     changeDestinationRoot: function() {
-      this.destinationRoot(path.join(
-        this.destinationRoot(),
-        '/components_local',
-        '/' + this.props.name
-      ));
+      if (this.props.implement === 'import') {
+        this.destinationRoot(path.join(
+          this.destinationRoot(),
+          '/source/assets/components',
+          '/' + this.props.name
+        ));
+      } else {
+        this.destinationRoot(path.join(
+          this.destinationRoot(),
+          '/components_local',
+          '/' + this.props.name
+        ));
+      }
     },
 
     app: function() {
