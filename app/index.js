@@ -141,19 +141,18 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     changeDestinationRoot: function() {
+      var component_path = null;
+
       if (this.props.implement === 'import') {
-        this.destinationRoot(path.join(
-          this.destinationRoot(),
-          '/source/assets/components',
-          '/' + this.props.name
-        ));
+        component_path = '/source/assets/components';
       } else {
-        this.destinationRoot(path.join(
-          this.destinationRoot(),
-          '/components_local',
-          '/' + this.props.name
-        ));
+        component_path = '/components_local';
       }
+      this.destinationRoot(path.join(
+        this.destinationRoot(),
+        component_path,
+        '/' + this.props.name
+      ));
     },
 
     app: function() {
