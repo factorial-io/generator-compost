@@ -61,8 +61,17 @@ module.exports = yeoman.generators.Base.extend({
       {
         type: 'confirm',
         name: 'addScripts',
-        message: 'Would you like to create scripts (jQueryUI widget)?',
+        message: 'Would you like to create scripts?',
         default: true
+      },
+      {
+        type: 'confirm',
+        name: 'scriptJquery',
+        message: 'Do you want to use a jQueryUI widget?',
+        default: true,
+        when: function (answers) {
+          return answers.addScripts;
+        }
       },
       {
         type: 'list',
@@ -71,7 +80,7 @@ module.exports = yeoman.generators.Base.extend({
         choices: ['$(document).ready', 'Drupal.behaviors'],
         default: '$(document).ready',
         when: function (answers) {
-          return answers.addScripts;
+          return answers.scriptJquery;
         }
       },
       {
@@ -172,6 +181,8 @@ module.exports = yeoman.generators.Base.extend({
           this.destinationPath(this.props.name + '.' + n),
           {
             name: this.props.name,
+            scriptJquery: this.props.scriptJquery,
+            implement: this.props.implement,
             instantiate: this.props.instantiate
           }
         );
@@ -219,10 +230,16 @@ module.exports = yeoman.generators.Base.extend({
 
       if (this.props.addScripts) {
         this.packageJson.main = this.props.name + '.js';
-        this.packageJson.dependencies = {
-          'components/jquery': '*',
-          'components/jqueryui': '*'
-        };
+        if (this.props.scriptJquery) {
+          this.packageJson.dependencies = {
+            'components/jquery': '*',
+            'components/jqueryui': '*'
+          };
+        } else {
+          this.packageJson.dependencies = {
+            'lodash': '^4.6.1'
+          };
+        }
         this.packageJson.files.push(this.props.name + '.js');
       }
       if (this.props.addStyles) {
