@@ -1,4 +1,4 @@
-'use strict';
+<% if (scriptJquery) { %>'use strict';
 
 /**
  *@fileOverview
@@ -108,3 +108,73 @@ require('jqueryui');
   });
   <% } %>
 })(window.jQuery, window, document);
+<% } else { %>'use strict';
+
+/**
+ *@fileOverview
+ *@version 0.0.1
+ *
+ * @namespace factorial.<%= _.camelCase(name) %>
+ */
+
+var _ = require('lodash');
+
+var defaults = {
+  value: true
+};
+
+var elements = {
+  elementName: '.<%= _.capitalize(_.camelCase(name)) %>-item'
+};
+
+
+var <%= _.capitalize(_.camelCase(name)) %> = function(element, options) {
+
+  this.element = element;
+  var data = JSON.parse(element.getAttribute('data-options'));
+  this.options = _.extend({}, defaults, options, data);
+
+  this.elements = {};
+
+  if (elements) {
+    _.forEach(elements, function(value, key) {
+      if (this.element.querySelectorAll(value) !== null) {
+        this.elements[key] = this.element.querySelectorAll(value)[0];
+      }
+    }.bind(this));
+  }
+
+  this._create();
+};
+
+<%= _.capitalize(_.camelCase(name)) %>.prototype._create = function() {
+  console.log('Create <%= _.capitalize(_.camelCase(name)) %>');
+};
+
+<%= _.capitalize(_.camelCase(name)) %>.prototype._setOption = function(key, value) {
+  //console.log('<%= _.capitalize(_.camelCase(name)) %>-option: ' + key + ' = ' + value);
+  switch (key) {
+    case 'value':
+      this.options[key] = value;
+      // some action
+      break;
+    default:
+      this.options[key] = value;
+      break;
+  }
+};
+
+/*
+ * Public methods
+ */
+
+<%= _.capitalize(_.camelCase(name)) %>.prototype.method = function(event) {
+  console.log('method called' + event);
+};
+<% if (implement == 'component.json') { %>
+if (document.addEventListener) {
+  _.forEach(document.getElementsByClassName('js-<%= _.capitalize(_.camelCase(name)) %>'), function(element) {
+    document.addEventListener('DOMContentLoaded', new <%= _.capitalize(_.camelCase(name)) %>(element));
+  });
+}<% } else { %>
+module.exports = <%= _.capitalize(_.camelCase(name)) %>;<% }%><% }%>

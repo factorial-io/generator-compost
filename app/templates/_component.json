@@ -5,9 +5,10 @@
   "styles": [<% if (props.addStyles) { %>"<%= props.name %>.css"<% } %>],
   "scripts": [<% if (props.addScripts) { %>"<%= props.name %>.js"<% } %>],
   "templates": [<% if (props.addTemplate) { %>"<%= props.name %>.<%= props.templateName %>"<% } %>],
-  "dependencies": {<% if (props.addScripts) { %>
+  "dependencies": {<% if (props.addScripts) { %><% if (props.scriptJquery) { %>
     "components/jquery": "*",
-    "components/jqueryui": "*"<% } %>
+    "components/jqueryui": "*"<% } else { %>
+    "lodash/lodash": "3.10.1"<% } %><% } %>
   },
   "license": "MIT"<% if (props.addTemplate) { %>,
   "backend": {
