@@ -11,7 +11,9 @@
     "url": ""
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint:js": "yarn run neutrino lint",
+    "fix:js": "yarn run neutrino lint --fix"
   },
   "files": [
     "app"
@@ -29,6 +31,8 @@
     "yosay": "^1.0.2"
   },
   "devDependencies": {
-    "mocha": "*"
+    "@factorial/frontend-stack-core": "^0.8.4",
+    "mocha": "*",
+    "neutrino": "^8.3.0"
   }
 }
