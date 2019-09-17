@@ -23,58 +23,41 @@ module.exports = yeoman.generators.Base.extend({
     const prompts = [
       {
         name: "name",
-        message: "What is your component's name?"
-      },
-      {
-        name: "githubUsername",
-        message: "GitHub username?",
-        default: "factorial-io"
+        message: "Enter a component name (use-dash-case)"
       },
       {
         type: "confirm",
         name: "addTemplate",
-        message: "Would you like to create a template?",
+        message: "Would you like to create a twig template file?",
         default: true
-      },
-      {
-        type: "list",
-        name: "templateName",
-        message: "What template language do you want to use?",
-        choices: ["twig"],
-        default: "twig",
-        when(answers) {
-          return answers.addTemplate;
-        }
       },
       {
         type: "confirm",
         name: "addStyles",
-        message: "Would you like to create styles",
+        message: "Would you like to create a css file?",
         default: true
       },
       {
         type: "confirm",
         name: "addScripts",
-        message: "Would you like to create scripts?",
+        message: "Would you like to create a js file?",
         default: true
       },
       {
-        type: "list",
-        name: "implement",
-        message: "How do you want to resolve your dependencies?",
-        choices: ["package.json"],
-        default: "package.json"
+        type: "confirm",
+        name: "addData",
+        message: "Would you like to create sample data (uses yaml)?",
+        default: true
       }
     ];
 
-    this.prompt(
-      prompts,
-      function(props) {
-        this.props = {};
-        this.props = props;
-        done();
-      }.bind(this)
-    );
+    function setProps(props) {
+      this.props = {};
+      this.props = props;
+      done();
+    }
+
+    this.prompt(prompts, setProps.bind(this));
   },
 
   writing: {
@@ -88,9 +71,10 @@ module.exports = yeoman.generators.Base.extend({
 
     app() {
       const options = {
-        addTemplate: this.props.templateName,
+        addTemplate: "twig",
         addStyles: "css",
-        addScripts: "js"
+        addScripts: "js",
+        addData: "yaml"
       };
 
       function matchesProperty(n, key) {
@@ -103,8 +87,8 @@ module.exports = yeoman.generators.Base.extend({
           this.destinationPath(`${this.props.name}.${n}`),
           {
             name: this.props.name,
-            instantiate: this.props.instantiate,
-            addScripts: this.props.addScripts
+            addScripts: this.props.addScripts,
+            addData: this.props.addData
           }
         );
       }
