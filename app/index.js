@@ -3,14 +3,14 @@ const chalk = require("chalk");
 const yosay = require("yosay");
 const path = require("path");
 const jf = require("jsonfile");
-const util = require("util");
 const _ = require("lodash");
+const pkg = require("../package.json");
 
 jf.spaces = 2;
 
 module.exports = yeoman.generators.Base.extend({
   initializing() {
-    this.pkg = require("../package.json");
+    this.pkg = pkg;
   },
 
   prompting() {
@@ -40,8 +40,8 @@ module.exports = yeoman.generators.Base.extend({
         type: "list",
         name: "templateName",
         message: "What template language do you want to use?",
-        choices: ["tpl.haml", "tpl.php", "tag"],
-        default: "tpl.haml",
+        choices: ["twig"],
+        default: "twig",
         when(answers) {
           return answers.addTemplate;
         }
@@ -49,30 +49,20 @@ module.exports = yeoman.generators.Base.extend({
       {
         type: "confirm",
         name: "addStyles",
-        message: "Would you like to create styles (SUIT CSS component)?",
+        message: "Would you like to create styles",
         default: true
       },
       {
         type: "confirm",
         name: "addScripts",
-        message: "Would you like to create scripts (jQueryUI widget)?",
+        message: "Would you like to create scripts?",
         default: true
-      },
-      {
-        type: "list",
-        name: "instantiate",
-        message: "How should the widget be instantiated?",
-        choices: ["$(document).ready", "Drupal.behaviors"],
-        default: "$(document).ready",
-        when(answers) {
-          return answers.addScripts;
-        }
       },
       {
         type: "list",
         name: "implement",
         message: "How do you want to resolve your dependencies?",
-        choices: ["package.json", "component.json", "import"],
+        choices: ["package.json"],
         default: "package.json"
       }
     ];
@@ -88,60 +78,9 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   writing: {
-    /*
-     * Adds a new local dependency to the project's component.json if not
-     * already present.
-     */
-
-    updateJson() {
-      let found = false;
-
-      const file = this.props.implement;
-      const obj = jf.readFileSync(file, { throws: false });
-
-      const isName = function(element) {
-        return element === this.props.name;
-      };
-
-      if (obj) {
-        if (this.props.implement === "package.json") {
-          if (!obj.dependencies) {
-            obj.dependencies = {};
-            jf.writeFileSync(file, obj);
-          }
-
-          found = _.some(obj.dependencies, isName.bind(this));
-
-          if (!found) {
-            obj.dependencies[
-              this.props.name
-            ] = `file:./components_local/${this.props.name}`;
-            jf.writeFileSync(file, obj);
-          }
-        } else if (this.props.implement === "component.json") {
-          if (!obj.locals) {
-            obj.locals = {};
-            jf.writeFileSync(file, obj);
-          }
-
-          found = _.some(obj.locals, isName.bind(this));
-
-          if (!found) {
-            obj.locals.push(this.props.name);
-            jf.writeFileSync(file, obj);
-          }
-        }
-      }
-    },
-
     changeDestinationRoot() {
-      let componentPath = null;
+      const componentPath = ".";
 
-      if (this.props.implement === "import") {
-        componentPath = "/source/source/components";
-      } else {
-        componentPath = "/components_local";
-      }
       this.destinationRoot(
         path.join(this.destinationRoot(), componentPath, `/${this.props.name}`)
       );
@@ -154,20 +93,21 @@ module.exports = yeoman.generators.Base.extend({
         addScripts: "js"
       };
 
-      const matchesProperty = function(n, key) {
+      function matchesProperty(n, key) {
         return !!this.props[key];
-      };
+      }
 
-      const copyTemplate = function(n) {
+      function copyTemplate(n) {
         this.fs.copyTpl(
           this.templatePath(`_component.${n}`),
           this.destinationPath(`${this.props.name}.${n}`),
           {
             name: this.props.name,
-            instantiate: this.props.instantiate
+            instantiate: this.props.instantiate,
+            addScripts: this.props.addScripts
           }
         );
-      };
+      }
 
       _.forEach(
         _.filter(options, matchesProperty.bind(this)),
@@ -177,7 +117,7 @@ module.exports = yeoman.generators.Base.extend({
 
     packageFiles() {
       let i;
-      const packages = ["_component.json"];
+      const packages = ["_package.json"];
 
       for (i = 0; i < packages.length; i += 1) {
         this.fs.copyTpl(
@@ -194,7 +134,7 @@ module.exports = yeoman.generators.Base.extend({
           type: "git",
           url: `https://github.com/${this.props.githubUsername}/${this.props.name}`
         },
-        license: "MIT",
+        license: "UNLICENSED",
         main: "",
         style: "",
         files: [],
@@ -208,10 +148,6 @@ module.exports = yeoman.generators.Base.extend({
 
       if (this.props.addScripts) {
         this.packageJson.main = `${this.props.name}.js`;
-        this.packageJson.dependencies = {
-          "components/jquery": "*",
-          "components/jqueryui": "*"
-        };
         this.packageJson.files.push(`${this.props.name}.js`);
       }
       if (this.props.addStyles) {
@@ -229,7 +165,7 @@ module.exports = yeoman.generators.Base.extend({
 
     projectFiles() {
       let i;
-      const projectFiles = ["editorconfig", "jshintrc"];
+      const projectFiles = [];
       for (i = 0; i < projectFiles.length; i += 1) {
         this.fs.copy(
           this.templatePath(projectFiles[i]),
