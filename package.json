@@ -7,7 +7,7 @@
   "repository": "factorial-io/generator-compost",
   "author": {
     "name": "Milan Matull",
-    "email": "milan@factorial.io",
+    "email": "milan@factorial.io"
   },
   "scripts": {
     "test": "mocha",
