@@ -115,54 +115,6 @@ module.exports = yeoman.generators.Base.extend({
       );
     },
 
-    packageFiles() {
-      let i;
-      const packages = ["_package.json"];
-
-      for (i = 0; i < packages.length; i += 1) {
-        this.fs.copyTpl(
-          this.templatePath(packages[i]),
-          this.destinationPath(packages[i].substr(1)),
-          { props: this.props }
-        );
-      }
-
-      this.packageJson = {
-        name: this.props.name,
-        version: "0.0.0",
-        repository: {
-          type: "git",
-          url: `https://github.com/${this.props.githubUsername}/${this.props.name}`
-        },
-        license: "UNLICENSED",
-        main: "",
-        style: "",
-        files: [],
-        dependencies: {},
-        backend: {
-          template: "",
-          fixture: "",
-          options: ""
-        }
-      };
-
-      if (this.props.addScripts) {
-        this.packageJson.main = `${this.props.name}.js`;
-        this.packageJson.files.push(`${this.props.name}.js`);
-      }
-      if (this.props.addStyles) {
-        this.packageJson.style = `${this.props.name}.css`;
-        this.packageJson.files.push(`${this.props.name}.css`);
-      }
-      if (this.props.addTemplate) {
-        this.packageJson.files.push(this.props.name + this.props.templateName);
-        this.packageJson.backend.template =
-          this.props.name + this.props.templateName;
-      }
-
-      this.write("package.json", JSON.stringify(this.packageJson, null, 2));
-    },
-
     projectFiles() {
       let i;
       const projectFiles = [];
