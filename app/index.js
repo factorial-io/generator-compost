@@ -23,7 +23,7 @@ module.exports = yeoman.generators.Base.extend({
     const prompts = [
       {
         name: "name",
-        message: "Enter a component name (use-dash-case)"
+        message: "Enter a pattern name (use-dash-case)"
       },
       {
         type: "confirm",

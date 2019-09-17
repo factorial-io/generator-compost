@@ -1,13 +1,16 @@
 # generator-compost
 
-> [Yeoman](http://yeoman.io) generator
+> Speed up your development workflow by quickly generating frontend patterns.
 
-Generator compost scaffolds opinionated, component-like structures into your project.
-Depending on your choices it will create the following files:
+Generator compost scaffolds opinionated frontend pattern structures into your
+file system. Depending on your choices it will create the following files:
 
     ├── _component.css
     ├── _component.js
     ├── _component.twig
+    ├── _component.yaml
+
+This is a companion tool for [pattern-lab-edition-factorial](https://github.com/factorial-io/pattern-lab-edition-factorial)
 
 ## Prerequisites
 
@@ -29,6 +32,4 @@ $ yarn global add generator-compost@alpha
 $ yo compost
 ```
 
-## License
-
-MIT
+An interactive wizard will guide yo through the process.
