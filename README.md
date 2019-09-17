@@ -23,7 +23,7 @@ $ yarn global add yo
 Install compost
 
 ```
-$ yarn global add generator-compost@alpha
+$ yarn global add generator-compost@1.0.0-alpha.1
 ```
 
 ## Usage
