@@ -1,14 +1,13 @@
 {
   "name": "generator-compost",
-  "version": "0.3.0",
-  "description": "Yeoman generator",
+  "version": "1.0.0-alpha.0",
+  "description": "Yeoman generator for opinionated frontend patterns.",
   "license": "MIT",
   "main": "app/index.js",
   "repository": "factorial-io/generator-compost",
   "author": {
-    "name": "",
-    "email": "",
-    "url": ""
+    "name": "Milan Matull",
+    "email": "milan@factorial.io",
   },
   "scripts": {
     "test": "mocha",
