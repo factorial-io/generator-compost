@@ -2,34 +2,31 @@
 
 > [Yeoman](http://yeoman.io) generator
 
-Generator compost scaffolds opinionated, component-like structures into your project. 
+Generator compost scaffolds opinionated, component-like structures into your project.
 Depending on your choices it will create the following files:
 
     ├── _component.css
     ├── _component.js
-    ├── _component.json
-    ├── _component.tpl.haml
-    ├── editorconfig
-    └── jshintrc
+    ├── _component.twig
 
-## Prerequisites 
+## Prerequisites
 
 Install Yeoman.
 
-```bash
-npm install -g yo
+```
+$ yarn global add yo
 ```
 
 Install compost
 
-```bash
-npm install -g generator-compost
+```
+$ yarn global add generator-compost@alpha
 ```
 
 ## Usage
 
-```bash
-yo compost my-component-name
+```
+$ yo compost
 ```
 
 ## License
